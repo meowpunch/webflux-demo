@@ -1,10 +1,15 @@
 package com.example.webfluxdemo
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.ServerResponse.ok
+import org.springframework.web.reactive.function.server.bodyAndAwait
+import org.springframework.web.reactive.function.server.bodyValueAndAwait
 import reactor.core.publisher.Mono
 
 @Component
@@ -23,25 +28,22 @@ class Handler {
     )
 
 
-    fun recommendRecipe(request: ServerRequest): Mono<ServerResponse> {
-        return ServerResponse
-                .ok()
+    suspend fun recommendRecipe(request: ServerRequest): ServerResponse {
+        return ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(recipes0)
+                .bodyValueAndAwait(recipes0)
     }
 
-    fun searchRecipe(request: ServerRequest): Mono<ServerResponse> {
-        return ServerResponse
-                .ok()
+    suspend fun searchRecipe(request: ServerRequest): ServerResponse {
+        return ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(recipes1)
+                .bodyAndAwait(flowOf(recipes1))
     }
 
-    fun notifyRecipe(request: ServerRequest): Mono<ServerResponse> {
-        return ServerResponse
-                .ok()
+    suspend fun notifyRecipe(request: ServerRequest): ServerResponse {
+        return ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(Recipe("김치찌개", "맛있게 끓인다")))
+                .bodyValueAndAwait(Recipe("김치찌개", "맛있게 끓인다"))
     }
 
 }
