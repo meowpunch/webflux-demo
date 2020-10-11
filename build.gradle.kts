@@ -23,6 +23,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.9.2")
+    implementation("org.elasticsearch:elasticsearch:7.9.2")
+
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.4.8")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.4.8")
 
