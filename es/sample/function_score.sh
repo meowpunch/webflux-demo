@@ -1,10 +1,10 @@
-curl -X GET "localhost:9200/omtm/recipe/_search" -H 'Content-Type: application/json' -d '
+curl -X POST "localhost:9200/omtm/recipe/_search" -H 'Content-Type: application/json' -d '
 {
   "query": {
     "function_score": {
       "query": {
         "multi_match": {
-          "query": "김치",
+          "query": "김치, 돼지고기",
           "fields": ["description","title^0.5"]
         }
       },

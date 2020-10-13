@@ -1,19 +1,17 @@
 package com.example.webfluxdemo
 
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.reactive.asFlow
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.*
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import org.springframework.web.reactive.function.server.bodyAndAwait
-import org.springframework.web.reactive.function.server.bodyValueAndAwait
-import reactor.core.publisher.Mono
 
 @Component
-class Handler {
+class Handler(@Autowired private val service: Service) {
 
     private val recipes0 = listOf(
             Recipe("김치찌개", "잘 끓인다"),
@@ -27,14 +25,22 @@ class Handler {
             Recipe("김치찌개", "맛있게 끓인다")
     )
 
+    @FlowPreview
+    suspend fun recommendRecipes(request: ServerRequest): ServerResponse =
+            ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .json()
+                    .bodyAndAwait(
+                            service.recommendRecipes(
+                                    // TODO: validator
+                                    request.queryParam("ingredients").orElseThrow(),
+                                    request.queryParam("size").orElseThrow().toInt()
+                            )
+                    )
 
-    suspend fun recommendRecipe(request: ServerRequest): ServerResponse {
-        return ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValueAndAwait(recipes0)
-    }
 
-    suspend fun searchRecipe(request: ServerRequest): ServerResponse {
+    suspend fun searchRecipes(request: ServerRequest): ServerResponse {
+        val a: Flow<List<Recipe>> = flowOf(recipes1)
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyAndAwait(flowOf(recipes1))
