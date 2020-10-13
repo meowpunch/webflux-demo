@@ -13,18 +13,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.ok
 @Component
 class Handler(@Autowired private val service: Service) {
 
-    private val recipes0 = listOf(
-            Recipe("김치찌개", "잘 끓인다"),
-            Recipe("된장찌개", "정성 들여 끓인다"),
-            Recipe("고추장찌개", "맛있게 끓인다")
-    )
-
-    private val recipes1 = listOf(
-            Recipe("고추장찌개", "잘 끓인다"),
-            Recipe("된장찌개", "정성 들여 끓인다"),
-            Recipe("김치찌개", "맛있게 끓인다")
-    )
-
     @FlowPreview
     suspend fun recommendRecipes(request: ServerRequest): ServerResponse =
             ok()
@@ -39,12 +27,17 @@ class Handler(@Autowired private val service: Service) {
                     )
 
 
-    suspend fun searchRecipes(request: ServerRequest): ServerResponse {
-        val a: Flow<List<Recipe>> = flowOf(recipes1)
-        return ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyAndAwait(flowOf(recipes1))
-    }
+    suspend fun searchRecipes(request: ServerRequest): ServerResponse =
+            ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .json()
+                    .bodyAndAwait(
+                            service.searchRecipes(
+                                    // TODO: validator
+                                    request.queryParam("keywords").orElseThrow(),
+                                    request.queryParam("size").orElseThrow().toInt()
+                            )
+                    )
 
     suspend fun notifyRecipe(request: ServerRequest): ServerResponse {
         return ok()

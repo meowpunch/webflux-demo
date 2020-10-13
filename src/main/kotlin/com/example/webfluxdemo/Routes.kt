@@ -21,7 +21,7 @@ class Routes {
     @FlowPreview
     @RouterOperations(
             RouterOperation(path = "/recommend-recipes", method = [RequestMethod.GET], beanClass = Service::class, beanMethod = "recommendRecipes"),
-            RouterOperation(path = "/search-recipes", method = [RequestMethod.GET], beanClass = Handler::class, beanMethod = "searchRecipes"),
+            RouterOperation(path = "/search-recipes", method = [RequestMethod.GET], beanClass = Service::class, beanMethod = "searchRecipes"),
             RouterOperation(path = "/notify-recipe", method = [RequestMethod.GET], beanClass = Handler::class, beanMethod = "notifyRecipe")
     )
     fun route(recipeHandler: Handler): RouterFunction<ServerResponse> = coRouter {

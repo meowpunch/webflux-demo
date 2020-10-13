@@ -32,6 +32,25 @@ class Service {
                       }
                     }
                   },
+                  "size": 2
+                }
+            """.trimIndent())
+            .retrieve()
+            .bodyToFlux(Any::class.java)
+            .asFlow()
+
+    fun searchRecipes(keywords: String, size: Int): Flow<Any> = webClient
+            .post()
+            .uri("/omtm/recipe/_search")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .bodyValue("""
+                {
+                  "query": {
+                    "multi_match": {
+                      "query": $keywords,
+                      "fields": ["description","title^0.5"]
+                    }
+                  },
                   "size": $size
                 }
             """.trimIndent())

@@ -2,10 +2,11 @@ curl -X GET "localhost:9200/omtm/recipe/_search" -H 'Content-Type: application/j
 {
   "query": {
     "multi_match" : {
-      "query": "김치",
+      "query": "김치, 돼지고기",
       "fields": [ "title", "description" ]
     }
-  }
+  },
+  "size": 2
 }
 '
 
