@@ -23,7 +23,7 @@ class Service {
                     "function_score": {
                       "query": {
                         "multi_match": {
-                          "query": $ingredients,
+                          "query": "$ingredients",
                           "fields": ["description","title^0.5"]
                         }
                       },
@@ -32,7 +32,7 @@ class Service {
                       }
                     }
                   },
-                  "size": 2
+                  "size": $size
                 }
             """.trimIndent())
             .retrieve()
@@ -47,7 +47,7 @@ class Service {
                 {
                   "query": {
                     "multi_match": {
-                      "query": $keywords,
+                      "query": "$keywords",
                       "fields": ["description","title^0.5"]
                     }
                   },
