@@ -41,3 +41,9 @@ fun searchRecipes(keywords: String, size: Int): Flow<Any> = webClient
       .bodyToFlux(Any::class.java)
       .asFlow()
 ```
+
+### Futhermore
+- apply validator to check request params
+- ecs task definition for auto deploy
+- optimize coroutine for async 
+- optimize ES architecture, query
